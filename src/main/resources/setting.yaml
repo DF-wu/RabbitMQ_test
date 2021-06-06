@@ -1,0 +1,7 @@
+HOST: "192.168.11.35"
+PORT: 5672
+USERNAME: "df"
+PASSWORD: "0"
+VIRTUALHOST: "/"
+EXCHANGE_NAME: "test_exchange_fanout"
+QUEUE_NAME: "test_queue"
