@@ -5,6 +5,7 @@ import df.rabbitmq.ConfigLoader;
 import df.rabbitmq.RabbitMQConfig;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
 public class Consumer {
@@ -95,7 +96,9 @@ public class Consumer {
                         String contentType = props.getContentType();
                         long deliveryTag = envelope.getDeliveryTag();
                         // (process the message components here ...)
-                        System.out.println(body);
+                        System.out.println(String.format("%s, %s, %s",routingKey, consumerTag, deliveryTag));
+                        String decodeMsg = new String(body, StandardCharsets.UTF_8);
+                        System.out.println(decodeMsg);
                         channel.basicAck(deliveryTag, false);
                     }
                 });
