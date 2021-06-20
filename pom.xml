@@ -33,6 +33,14 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.30</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.jsoniter/jsoniter -->
+        <dependency>
+            <groupId>com.jsoniter</groupId>
+            <artifactId>jsoniter</artifactId>
+            <version>0.9.23</version>
+        </dependency>
+
     </dependencies>
 
 
