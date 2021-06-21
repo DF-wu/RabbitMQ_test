@@ -1,13 +1,13 @@
 package df.rabbitmq;
 
-import df.rabbitmq.Consumer.Consumer;
-import df.rabbitmq.Producer.Producer;
+import df.rabbitmq.Consumer.ConsumerD;
+import df.rabbitmq.Producer.ProducerP;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeoutException;
 
@@ -36,26 +36,31 @@ public class Main {
         if (s.equals("c"))
         {
             //          consumer
-            Consumer consumer = new Consumer(filename);
-            
-            consumer.pollMsg();
+            ConsumerD consumerD = new ConsumerD(filename);
+            consumerD.pollMsg();
             
         }
         else if (s.equals("p"))
         {
             //          producer
-            Producer producer = new Producer(filename);
+            ProducerP producerP = new ProducerP(filename);
             while(true)
             {
                 String str = scanner.next();
-                producer.send(str);
+                producerP.send(str);
             }
-        }else if(s.equals("superP")){
-            for (int i = 0; i < 10000; i++)
+        }else if(s.equals("pp")){
+            long now = System.currentTimeMillis();
+            
+            for (int i = 0; i < 1000; i++)
             {
-                Producer producer = new Producer(filename);
-                producer.send(i+ "  " + UUID.randomUUID().toString());
+                ProducerP producerP = new ProducerP(filename);
+                producerP.send(i+ "  " + UUID.randomUUID().toString());
+                System.out.println("msg sent: " + i);
+                producerP.closeConnectionandChannels();
             }
+            
+            System.out.println("use time: " + ( System.currentTimeMillis() - now ) );
         }
         else System.out.println("Wrong Input!");
     
