@@ -3,6 +3,7 @@ package df.rabbitmq.Producer;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.MessageProperties;
 import df.rabbitmq.ConfigLoader;
 import df.rabbitmq.RabbitMQConfig;
 
@@ -14,13 +15,13 @@ import java.util.concurrent.TimeoutException;
 /*
 * for sub/pub mode
 */
-public class Producer {
+public class ProducerP {
     private final RabbitMQConfig rabbitMQConfig;
     private ConnectionFactory connectionFactory;
     private Connection connection;
     private Channel channel;
     
-    public Producer(String filename) throws IOException, TimeoutException
+    public ProducerP(String filename) throws IOException, TimeoutException
     {
         ConfigLoader configLoader = new ConfigLoader(filename);
         rabbitMQConfig = new RabbitMQConfig();
@@ -59,13 +60,20 @@ public class Producer {
     
     public void send(String msg) throws IOException
     {
+        /*
+          param 1 = exchange
+          param 2 = routingKey
+          param 3 = basicProperties
+          param 4 = msg in byte[]
+          */
+        
        channel.basicPublish(
                rabbitMQConfig.getEXCHANGE_NAME(),
                "",
-               null,
+               MessageProperties.PERSISTENT_TEXT_PLAIN,
                msg.getBytes(StandardCharsets.UTF_8)
        );
-        System.out.println("msg sent: " + msg);
+       
         
     }
     
