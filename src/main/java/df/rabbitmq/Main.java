@@ -62,6 +62,18 @@ public class Main {
             
             System.out.println("use time: " + ( System.currentTimeMillis() - now ) );
         }
+        else if (s.equals("ppr"))
+        {   // test for reuse connection
+            long now = System.currentTimeMillis();
+            ProducerP producerP = new ProducerP(filename);
+            for (int i = 0; i < 1000; i++)
+            {
+                producerP.send(i + "  " + UUID.randomUUID().toString());
+                System.out.println("msg sent: " + i);
+            }
+            producerP.closeConnectionandChannels();
+            System.out.println("use time: " + (System.currentTimeMillis() - now));
+        }
         else System.out.println("Wrong Input!");
     
     
