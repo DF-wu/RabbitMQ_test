@@ -26,8 +26,9 @@ public class ProducerP {
         ConfigLoader configLoader = new ConfigLoader(filename);
         rabbitMQConfig = new RabbitMQConfig();
         rabbitMQConfig.read(configLoader.getYAMLmap());
-        channel = establishConnection().createChannel();
-    
+        establishConnection();
+        channel = connection.createChannel();
+        
         /*
          * 宣告exchange(交換機)
          * 引數1：交換機名稱
@@ -36,6 +37,8 @@ public class ProducerP {
          * 引數4：交換機在不被使用時是否刪除
          * 引數5：交換機的其他屬性
          */
+        
+        
         channel.exchangeDeclare(
                 rabbitMQConfig.getEXCHANGE_NAME(),
                 "fanout",
@@ -44,7 +47,7 @@ public class ProducerP {
                 null);
     }
     
-    public Connection establishConnection( ) throws IOException, TimeoutException
+    public void establishConnection( ) throws IOException, TimeoutException
     {
         // establish connection
         connectionFactory = new ConnectionFactory();
@@ -54,7 +57,6 @@ public class ProducerP {
         connectionFactory.setVirtualHost(rabbitMQConfig.getVIRTUALHOST());
         connectionFactory.setHost(rabbitMQConfig.getHOST());
         connection = connectionFactory.newConnection();
-        return connection;
     }
     
     
@@ -83,5 +85,27 @@ public class ProducerP {
         connection.close();
     }
     
+    // only for experiment
+    public void sendWithNewChannel(String msg) throws IOException
+    {
+        Channel ch = connection.createChannel();
+    
+        channel.exchangeDeclare(
+                rabbitMQConfig.getEXCHANGE_NAME(),
+                "fanout",
+                true,
+                true,
+                null);
+    
+    
+        channel.basicPublish(
+                rabbitMQConfig.getEXCHANGE_NAME(),
+                "MDFK",
+                MessageProperties.PERSISTENT_TEXT_PLAIN,
+                msg.getBytes(StandardCharsets.UTF_8)
+        );
+    
+    
+    }
     
 }

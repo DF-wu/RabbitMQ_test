@@ -49,7 +49,8 @@ public class Main {
                 String str = scanner.next();
                 producerP.send(str);
             }
-        }else if(s.equals("pp")){
+        }else if(s.equals("pp"))
+        {
             long now = System.currentTimeMillis();
             
             for (int i = 0; i < 1000; i++)
@@ -66,12 +67,23 @@ public class Main {
         {   // test for reuse connection
             long now = System.currentTimeMillis();
             ProducerP producerP = new ProducerP(filename);
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 10000; i++)
             {
                 producerP.send(i + "  " + UUID.randomUUID().toString());
                 System.out.println("msg sent: " + i);
             }
             producerP.closeConnectionandChannels();
+            System.out.println("use time: " + (System.currentTimeMillis() - now));
+        }
+        else if (s.equals("ppch")){
+            long now = System.currentTimeMillis();
+            ProducerP p = new ProducerP(filename);
+            for (int i = 0; i < 100000; i++)
+            {
+                p.sendWithNewChannel(i + "  " + UUID.randomUUID().toString());
+                System.out.println("msg sent: " + i);
+            }
+            p.closeConnectionandChannels();
             System.out.println("use time: " + (System.currentTimeMillis() - now));
         }
         else System.out.println("Wrong Input!");

@@ -20,6 +20,7 @@ public class ConsumerD {
         rabbitMQConfig = new RabbitMQConfig();
         rabbitMQConfig.read(configLoader.getYAMLmap());
         channel = EstablishConnection().createChannel();
+        
         EstablishQueue();
         /*
          * 宣告exchange(交換機)
@@ -125,4 +126,35 @@ public class ConsumerD {
         connection.close();
     }
     
+    
+    
+    // for Experiment only
+    public void pollMsgWithNewChannel() throws IOException
+    {
+        Channel ch = connection.createChannel();
+    
+        ch.queueDeclare(
+                rabbitMQConfig.getQUEUE_NAME(),
+                false,
+                false,
+                false,
+                null
+        );
+    
+        ch.queueBind(
+                rabbitMQConfig.getQUEUE_NAME(),
+                rabbitMQConfig.getEXCHANGE_NAME(),
+                "MDFK");
+    
+    
+        ch.exchangeDeclare(
+                rabbitMQConfig.getEXCHANGE_NAME(),
+                "fanout",
+                false,
+                true,
+                null);
+    
+        channel.basicConsume(rabbitMQConfig.getQUEUE_NAME(), false, "consumerTag",
+                new DFConsumer(channel,""));
+    }
 }
