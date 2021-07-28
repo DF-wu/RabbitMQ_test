@@ -4,6 +4,6 @@ sudo docker run -d \
 -p 15672:15672 \
 -p 5672:5672 \
 -e RABBITMQ_DEFAULT_USER=root \
--e RABBITMQ_DEFAULT_PASS=admin1234 \
--v /home/df/workspace/rbq/data:/var/lib/rabbitmq \
+-e RABBITMQ_DEFAULT_PASS=admin \
+-v ~/workspace/rbq/data:/var/lib/rabbitmq \
 rabbitmq:management
